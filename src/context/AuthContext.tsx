@@ -1,3 +1,4 @@
+import { ValidateUserObject } from '../utils/Validation'
 import type { User } from '../types'
 
 import { createContext } from 'react'
@@ -11,8 +12,12 @@ export const AuthContext = createContext<AuthContext | null>(null)
 
 export function AuthProvider({ children }: { children: any }) {
 	function login(user: User) {
-		// TODO - Do some checks on the incoming user object
-		window.localStorage.setItem('user', JSON.stringify(user))
+		if (ValidateUserObject(user) == false) {
+			throw Error('Invalid user object. Cannot save to localStorage')
+		}
+		else {
+			window.localStorage.setItem('user', JSON.stringify(user))
+		}
 	}
 
 	function getUser(): User | null {
