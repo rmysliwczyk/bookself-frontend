@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button'
+import CircularProgress from '@mui/material/CircularProgress'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 
@@ -9,9 +10,10 @@ import TC from '../utils/TitleCaseFromSnakeCase'
 interface BookFormProps {
 	defaultValues?: BookFormData
 	onValidated: (data: BookFormData) => void
+	loading?: boolean
 }
 
-export default function BookForm({defaultValues, onValidated}: BookFormProps) {
+export default function BookForm({defaultValues, onValidated, loading}: BookFormProps) {
 	const bookData = defaultValues ? defaultValues :
 		{
 			user_id: "",
@@ -40,8 +42,8 @@ export default function BookForm({defaultValues, onValidated}: BookFormProps) {
 						)
 					})}
 					<Grid size={12} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-						<Button variant='contained' type="submit">
-							Submit
+						<Button variant='contained' type="submit" disabled={loading} sx={{width: "100px"}}>
+							Submit {loading && <CircularProgress size={20} sx={{marginLeft: "5px"}}/>}
 						</Button>
 					</Grid>
 				</Grid>

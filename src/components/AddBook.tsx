@@ -1,5 +1,5 @@
 import Alert from '@mui/material/Alert'
-import CircularProgress from '@mui/material/CircularProgress'
+import Grow from '@mui/material/Grow'
 
 import usePost from '../hooks/usePost'
 
@@ -29,9 +29,8 @@ export default function AddBook() {
 
 	return (
 		<>
-			{ error && <Alert severity="error">{error}</Alert> }
-			{ loading ? <CircularProgress/> :
-			<BookForm onValidated={handleValidated}/> }
+			{ <BookForm onValidated={handleValidated}  loading={loading} /> }
+			{ error && <Grow in={Boolean(error)}><Alert severity="error">{error}</Alert></Grow> }
 		</>
 	)
 }
