@@ -16,6 +16,7 @@ export function AuthProvider({ children }: { children: any }) {
 			throw Error('Invalid user object. Cannot save to localStorage')
 		}
 		else {
+			window.localStorage.removeItem('user')
 			window.localStorage.setItem('user', JSON.stringify(user))
 		}
 	}

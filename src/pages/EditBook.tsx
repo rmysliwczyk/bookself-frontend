@@ -3,19 +3,20 @@ import Grow from '@mui/material/Grow'
 
 import usePost from '../hooks/usePost'
 
-import BookForm from './BookForm'
+import BookForm from '../components/BookForm'
 
 import type {BookFormData} from '../types'
 
 import {useEffect} from 'react'
-import {useNavigate} from 'react-router'
+import {useNavigate, useParams} from 'react-router'
 
 export default function AddBook() {
-	const {data, error, loading, post} = usePost()
+	const {data, error, loading, post} = usePost() // TODO - REPLACE WITH usePATCH when implemented
 	const navigate = useNavigate()
+	const params = useParams()
 
 	function handleValidated(data: BookFormData) {
-		post(`${import.meta.env.VITE_API_URL}/books`, data)
+		console.log("TODO - PATCH")
 		console.log(data)
 	}
 	
@@ -29,6 +30,7 @@ export default function AddBook() {
 
 	return (
 		<>
+			ID: {params.book_id}
 			{ <BookForm onValidated={handleValidated}  loading={loading} /> }
 			{ error && <Grow in={Boolean(error)}><Alert severity="error">{error}</Alert></Grow> }
 		</>

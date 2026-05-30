@@ -52,7 +52,7 @@ export default function useGet<T>(url: string, options?: RequestInit) {
 
 			return function() { isCancelled = true }
 		}
-	}, [url, options, refetchIndex])
+	}, [url, refetchIndex])
 
 	return {...state, refetch, reset}
 }

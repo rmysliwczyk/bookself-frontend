@@ -4,11 +4,16 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import { AuthProvider } from './context/AuthContext'
 
-import AddBook from './components/AddBook'
 import Layout from './components/Layout'
-import MyBooks from './components/MyBooks'
 
-import { BrowserRouter, Routes, Route} from 'react-router'
+import AddBook from './pages/AddBook'
+import Books from './pages/Books'
+import EditBook from './pages/EditBook'
+import Login from './pages/Login'
+import Profile from './pages/Profile'
+import Register from './pages/Register'
+
+import { BrowserRouter, Routes, Route } from 'react-router'
 
 const theme = createTheme({
 	palette: {
@@ -40,9 +45,13 @@ function App() {
 				<AuthProvider>
 					<Routes>
 						<Route path="/" element={<Layout />} >
-							<Route path="books" element={<MyBooks />} />
+							<Route path="books" element={<Books />} />
 							<Route path="books/add" element={<AddBook />} />
+							<Route path="/books/:book_id" element={<EditBook />} />
+							<Route path="/user/:user_id" element={<Profile />} />
 						</Route>
+						<Route path="/login" element={<Login />} />
+						<Route path="/register" element={<Register />} />
 					</Routes>
 				</AuthProvider>
 			</BrowserRouter>

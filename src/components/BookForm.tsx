@@ -35,11 +35,13 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 			<form onSubmit={handleSubmit} autoComplete='off'>
 				<Grid container spacing={2}>
 					{Object.keys(bookData).map(function (key) {
-						return (
-							<Grid size={{xs: 12, md: 6}} key={key}>
-								<TextField defaultValue={bookData[key as keyof BookFormData]} name={key} label={TC(key)} fullWidth />
-							</Grid>
-						)
+						if(key != "user_id"){
+							return (
+								<Grid size={{xs: 12, md: 6}} key={key}>
+									<TextField defaultValue={bookData[key as keyof BookFormData]} name={key} label={TC(key)} fullWidth />
+								</Grid>
+							)
+						}
 					})}
 					<Grid size={12} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 						<Button variant='contained' type="submit" disabled={loading} sx={{width: "100px"}}>

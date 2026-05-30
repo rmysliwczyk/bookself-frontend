@@ -3,63 +3,81 @@ import Grid from '@mui/material/Grid'
 
 import { AuthContext } from '../context/AuthContext'
 import BookCard from './BookCard'
+import DeleteBookModal from './DeleteBookModal'
 
+import useDelete from '../hooks/useDelete'
 import useGet from '../hooks/useGet'
 
-import { useContext, useState } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
-type Book = {
-	title: string,
-	author: string,
-	rating: number,
-	cover_photo_url: string
-}
 
-const books = [
-	{ 
-		cover_photo_url: 'https://upload.wikimedia.org/wikipedia/en/6/62/JohnWyndham_TheDayOfTheTriffids.jpg',
-		title: 'The Day of the Triffids',
-		author: 'John Wyndham',
-		rating: 7
-	}
-	,
-	{
-		cover_photo_url: 'https://www.wydawnictwoliterackie.pl/storage/images/products/460x724/niezwyciezony_60588194a1f7e.jpg',
-		title: 'Niezwyciężony',
-		author: 'Stanisław Lem',
-		rating: 8
-	}
-]
+import type { Book } from '../types'
+
+type DeleteBookModalData = {
+	open: boolean,
+	book?: Book
+}
 
 export default function MyBooks() {
 	const auth = useContext(AuthContext)
-	const [requestURL, setRequestURL] = useState("")
-	const {data, error, loading} = useGet<Array<Book>>(requestURL)
 
-	// React-router related
+	const [requestURL, setRequestURL] = useState("")
+	const {data, error: getError, loading: getLoading, refetch} = useGet<Array<Book>>(requestURL, {headers: {"Authorization": `Bearer ${auth!.getUser()!.token}`}})
+
+	const [deleteBookModalData, setDeleteBookModalData] = useState<DeleteBookModalData>({open: false})
+	const {deleteRequest, error: deleteError, loading: deleteLoading}  = useDelete() // TODO Finish implementing it
+
 	const navigate = useNavigate()
 	
-	console.log(data)
+	useEffect(function() {
+		if (!data) {
+			setRequestURL(`http://127.0.0.1:8000/books/${auth?.getUser().id}`)
+		}
+	}, [data])
+
+	useEffect(function() {
+		if (!deleteLoading && !deleteError) {
+			// Book was successfully deleted
+			setDeleteBookModalData({open: false})
+			refetch()
+		}
+	}, [deleteError, deleteLoading])
 
 	function loggedIn() {
-		console.log(auth?.getUser().id)
-		setRequestURL(`http://127.0.0.1:8000/books/${auth?.getUser().id}`)
+
+	}
+
+	function handleOpenDeleteModal(book: Book) {
+		setDeleteBookModalData(
+			{
+				open: true,
+				book: book
+			}
+		)
+	}
+
+	async function handleDeleteBook(book: Book) {
+		await deleteRequest(`${import.meta.env["VITE_API_URL"]}/books/${book.id}`)
 	}
 
 	return (<>
 		<Button variant="contained" onClick={function() {navigate("/books/add")}}>
 			Add book
 		</Button>
-		<Button variant="contained" onClick={function() {auth?.login({id: "85c4a3a9-8f5e-4b5e-a9db-7a413e6abae8", token: "abc"}); loggedIn()}}>
-			TEMP - Login
-		</Button>
+		<DeleteBookModal 
+				open={deleteBookModalData.open}
+				book={deleteBookModalData.book}
+				onDelete={handleDeleteBook}
+				onClose={function() {setDeleteBookModalData({open: false})}}
+		/>
 		<Grid container
 			spacing={2}
 		>
-			{ data && [...data, ...books].map((book, index) => {
+
+			{ data && data.map((book, index) => {
 				console.log(book)
 				return <Grid size={{xs: 12, sm: 6, md: 4}} key={index}>
-					<BookCard props={{...book, coverPhotoUrl: book.cover_photo_url}}/>
+					<BookCard onDelete={handleOpenDeleteModal} book={book}/>
 				</Grid>
 				})
 			}
