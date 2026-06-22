@@ -32,7 +32,7 @@ pipeline {
 
         stage('Run New Container') {
             steps {
-                sh 'docker run -d --restart always --name \"bkslf-frontend\" -p 8013:8000 \"bkslf-frontend\"'
+                sh 'docker run -d --restart always --name \"bkslf-frontend\" -p 8013:80 \"bkslf-frontend\"'
             }
         }
     }
