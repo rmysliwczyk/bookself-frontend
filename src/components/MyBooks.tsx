@@ -31,7 +31,7 @@ export default function MyBooks() {
 	
 	useEffect(function() {
 		if (!data) {
-			setRequestURL(`http://127.0.0.1:8000/books/${auth?.getUser().id}`)
+			setRequestURL(`${import.meta.env['VITE_API_URL']}/books/${auth?.getUser().id}`)
 		}
 	}, [data])
 
