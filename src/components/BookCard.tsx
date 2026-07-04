@@ -16,24 +16,15 @@ export interface BookCardProps {
 
 export default function BookCard({book, onDelete}: BookCardProps) {
 	return (
-		<>
-			<Box
-				component={Paper}
-				sx={{
-					width: '100%',
-					padding: '10px'
-				}}
-				variant="outlined"
-			>
-				<Grid container spacing={1}>
+				<Grid container spacing={1} component={Paper} variant="outlined" sx={{padding: '10px'}}>
 					<Grid size={6}>
 						<Box sx={{height: '200px'}}>
-						<img style={{width: '100%', height: '100%', objectFit: 'contain'}} src={book.cover_photo_url}/>
+						<img style={{width: '100%', height: '100%', objectFit: 'contain'}} src={URL.createObjectURL(new Blob([Uint8Array.fromBase64(book.cover_image)], {type: "image/jpeg"}))}/>
 						</Box>
 					</Grid>
 					<Grid size={6}>
 						<Stack spacing={1} sx={{height: '100%', justifyContent: 'flex-start'}}>
-							<Stack direction='row' spacing={2}>
+							<Stack direction='row' spacing={1} useFlexGap sx={{flexWrap: 'wrap'}}>
 								<Typography sx={{fontWeight: 600}}>Title:</Typography>
 								<Typography>{book.title}</Typography>
 							</Stack>
@@ -47,7 +38,5 @@ export default function BookCard({book, onDelete}: BookCardProps) {
 						</Stack>
 					</Grid>
 				</Grid>
-			</Box>
-		</>
 	)
 }

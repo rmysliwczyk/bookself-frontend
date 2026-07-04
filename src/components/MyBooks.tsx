@@ -31,7 +31,7 @@ export default function MyBooks() {
 	
 	useEffect(function() {
 		if (!data) {
-			setRequestURL(`${import.meta.env['VITE_API_URL']}/books/${auth?.getUser().id}`)
+			setRequestURL(`${import.meta.env['VITE_API_URL']}/users/${auth?.getUser().id}/books`)
 		}
 	}, [data])
 
@@ -76,7 +76,7 @@ export default function MyBooks() {
 
 			{ data && data.map((book, index) => {
 				console.log(book)
-				return <Grid size={{xs: 12, sm: 6, md: 4}} key={index}>
+				return <Grid size={{xs: 12, md: 6, lg: 4}} key={index}>
 					<BookCard onDelete={handleOpenDeleteModal} book={book}/>
 				</Grid>
 				})
