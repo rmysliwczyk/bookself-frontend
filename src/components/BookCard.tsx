@@ -23,7 +23,7 @@ export default function BookCard({book, onDelete}: BookCardProps) {
 						</Box>
 					</Grid>
 					<Grid size={6}>
-						<Stack spacing={1} sx={{height: '100%', justifyContent: 'flex-start'}}>
+						<Stack spacing={1} sx={{height: '100%', width: '100%', justifyContent: 'flex-start'}}>
 							<Stack direction='row' spacing={1} useFlexGap sx={{flexWrap: 'wrap'}}>
 								<Typography sx={{fontWeight: 600}}>Title:</Typography>
 								<Typography>{book.title}</Typography>

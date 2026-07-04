@@ -71,7 +71,7 @@ export default function MyBooks() {
 				onClose={function() {setDeleteBookModalData({open: false})}}
 		/>
 		<Grid container
-			spacing={2}
+			spacing={2} sx={{width: '100%'}}
 		>
 
 			{ data && data.map((book, index) => {
