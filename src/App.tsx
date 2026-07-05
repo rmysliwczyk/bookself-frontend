@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './context/ProtectedRoute'
 
 import Layout from './components/Layout'
 
@@ -44,11 +45,13 @@ function App() {
 			<BrowserRouter>
 				<AuthProvider>
 					<Routes>
-						<Route path="/" element={<Layout />} >
-							<Route path="books" element={<Books />} />
-							<Route path="books/add" element={<AddBook />} />
-							<Route path="/books/:book_id" element={<EditBook />} />
-							<Route path="/user/:user_id" element={<Profile />} />
+						<Route element={<ProtectedRoute/>}>
+							<Route path="/" element={<Layout />} >
+								<Route path="books" element={<Books />} />
+								<Route path="books/add" element={<AddBook />} />
+								<Route path="/books/:book_id" element={<EditBook />} />
+								<Route path="/user/:user_id" element={<Profile />} />
+							</Route>
 						</Route>
 						<Route path="/login" element={<Login />} />
 						<Route path="/register" element={<Register />} />

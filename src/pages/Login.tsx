@@ -17,10 +17,12 @@ import { useNavigate } from 'react-router'
 export default function Login() {
 	const navigate = useNavigate()
 	const auth = useContext(AuthContext)
+	const [loginInProgress, setLoginInProgress] = useState<boolean>(false)
 	const [error, setError] = useState<string|null>(null)
 
 	async function loginHandler(event: React.SubmitEvent) {
 		event.preventDefault()
+		setLoginInProgress(true)
 		setError(null)
 		const formData = new FormData(event.target)
 		const credentials = Object.fromEntries(formData) as any as Credentials
@@ -106,7 +108,7 @@ export default function Login() {
 						<FormControl>
 							<Button
 								type="submit"
-								loading={auth?.loginInProgress}
+								loading={loginInProgress}
 							>
 								Login
 							</Button>

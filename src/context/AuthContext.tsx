@@ -6,6 +6,7 @@ import { createContext } from 'react'
 interface AuthContext {
 	login: (user: User) => void
 	getUser: () => User | null
+	isTokenValid: () => Promise<boolean>
 }
 
 export const AuthContext = createContext<AuthContext | null>(null)
@@ -31,11 +32,35 @@ export function AuthProvider({ children }: { children: any }) {
 		}
 	}
 
+	async function isTokenValid(): Promise<boolean> {
+		const user = getUser()
+
+		if (!user) {
+			return false
+		}
+		
+		const res = await fetch(
+			`${import.meta.env["VITE_API_URL"]}/users/me`,
+			{
+				'headers': {
+					'Authorization': `Bearer ${user.token}`
+				}
+			}
+		)
+
+		if (res.status === 200) {
+			return true
+		} else {
+			return false
+		}
+	}
+
 	return (
 		<AuthContext
 			value={{
 				login,
-				getUser
+				getUser,
+				isTokenValid
 			}}
 		>
 			{children}
