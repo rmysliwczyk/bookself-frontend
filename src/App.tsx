@@ -1,6 +1,7 @@
 
 import CssBaseline from '@mui/material/CssBaseline'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import Grow from '@mui/material/Grow'
 
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './context/ProtectedRoute'

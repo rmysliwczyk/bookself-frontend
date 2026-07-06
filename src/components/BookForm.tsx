@@ -1,6 +1,7 @@
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import Grid from '@mui/material/Grid'
+import Grow from '@mui/material/Grow'
 import TextField from '@mui/material/TextField'
 import Input from '@mui/material/Input'
 
@@ -38,25 +39,27 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 	return (
 		<>
 			<form onSubmit={handleSubmit} autoComplete='off'>
-				<Grid container spacing={2}>
-					{Object.keys(bookData).map(function (key) {
-						if(key != "user_id"){
-							return (
-								<Grid size={{xs: 12, md: 6}} key={key}>
-									<TextField defaultValue={bookData[key as keyof BookFormData]} name={key} label={TC(key)} fullWidth />
-								</Grid>
-							)
-						}
-					})}
-					<Grid size={{xs: 12, md: 12}} key="cover_image">
-						<Button component="label" variant="contained" sx={{width: "100%", height: "100%"}}>Upload cover image <Input sx={{display: "none"}}type="file" name="cover_image"/></Button>
+				<Grow in={true} timeout={1000}>
+					<Grid container spacing={2}>
+						{Object.keys(bookData).map(function (key) {
+							if(key != "user_id"){
+								return (
+									<Grid size={{xs: 12, md: 6}} key={key}>
+										<TextField defaultValue={bookData[key as keyof BookFormData]} name={key} label={TC(key)} fullWidth />
+									</Grid>
+								)
+							}
+						})}
+						<Grid size={{xs: 12, md: 12}} key="cover_image">
+							<Button component="label" variant="contained" sx={{width: "100%", height: "100%"}}>Upload cover image <Input sx={{display: "none"}}type="file" name="cover_image"/></Button>
+						</Grid>
+						<Grid size={12} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+							<Button variant='contained' type="submit" disabled={loading} sx={{width: "100px"}}>
+								Submit {loading && <CircularProgress size={20} sx={{marginLeft: "5px"}}/>}
+							</Button>
+						</Grid>
 					</Grid>
-					<Grid size={12} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-						<Button variant='contained' type="submit" disabled={loading} sx={{width: "100px"}}>
-							Submit {loading && <CircularProgress size={20} sx={{marginLeft: "5px"}}/>}
-						</Button>
-					</Grid>
-				</Grid>
+				</Grow>
 			</form>
 		</>
 	)

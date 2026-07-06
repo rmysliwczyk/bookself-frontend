@@ -4,6 +4,7 @@ import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import Container from '@mui/material/Container'
 import FormControl from '@mui/material/FormControl'
+import Slide from '@mui/material/Slide'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
@@ -50,77 +51,79 @@ export default function Login() {
 
 	return(
 		<>
-			<Container
-				sx={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					justifyContent: 'center',
-					height: '80vh',
-				}}
-			>
-				<Box
-					component={Card}
+			<Slide in={true} direction="up" timeout={500}>
+				<Container
 					sx={{
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						gap: '30px',
-						maxWidth: '300px',
-						padding: '20px',
-						overflow: 'auto',
+						justifyContent: 'center',
+						height: '80vh',
 					}}
 				>
-					<Box>
-						<Typography variant="h4">
-							BookSelf
-						</Typography>
-					</Box>
 					<Box
-						component="form"
-						onSubmit={loginHandler}
-						noValidate
+						component={Card}
 						sx={{
 							display: 'flex',
 							flexDirection: 'column',
-							gap: '20px',
 							alignItems: 'center',
-							justifyContent: 'center',
+							gap: '30px',
+							maxWidth: '300px',
+							padding: '20px',
+							overflow: 'auto',
 						}}
 					>
-						<FormControl>
-							<TextField
-								id="username"
-								name="username"
-								label="Username"
-								variant="standard"
-							/>
-						</FormControl>
-						<FormControl>
-							<TextField
-								id="password"
-								name="password"
-								label="Password"
-								variant="standard"
-								type="password"
-							/>
-						</FormControl>
-						<FormControl>
-							<Button
-								type="submit"
-								loading={loginInProgress}
-							>
-								Login
-							</Button>
-						</FormControl>
-						{error && (
-							<Alert severity="error">
-								{error}
-							</Alert>
-						)}
+						<Box>
+							<Typography variant="h4">
+								BookSelf
+							</Typography>
+						</Box>
+						<Box
+							component="form"
+							onSubmit={loginHandler}
+							noValidate
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								gap: '20px',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
+							<FormControl>
+								<TextField
+									id="username"
+									name="username"
+									label="Username"
+									variant="standard"
+								/>
+							</FormControl>
+							<FormControl>
+								<TextField
+									id="password"
+									name="password"
+									label="Password"
+									variant="standard"
+									type="password"
+								/>
+							</FormControl>
+							<FormControl>
+								<Button
+									type="submit"
+									loading={loginInProgress}
+								>
+									Login
+								</Button>
+							</FormControl>
+							{error && (
+								<Alert severity="error">
+									{error}
+								</Alert>
+							)}
+						</Box>
 					</Box>
-				</Box>
-			</Container>
+				</Container>
+			</Slide>
 		</>
 	)
 }
