@@ -9,7 +9,7 @@ import useDelete from '../hooks/useDelete'
 import useGet from '../hooks/useGet'
 
 import { useContext, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import type { Book } from '../types'
 
@@ -18,10 +18,13 @@ type DeleteBookModalData = {
 	book?: Book
 }
 
-export default function MyBooks() {
+export default function UserBooks() {
+	const params = useParams()
 	const auth = useContext(AuthContext)
 
+	console.log(params)
 	const [requestURL, setRequestURL] = useState("")
+	const [ownerView, setOwnerView] = useState<boolean>(!params.user_id)
 	const {data, error: getError, loading: getLoading, refetch} = useGet<Array<Book>>(requestURL, {headers: {"Authorization": `Bearer ${auth!.getUser()!.token}`}})
 
 	const [deleteBookModalData, setDeleteBookModalData] = useState<DeleteBookModalData>({open: false})
@@ -31,7 +34,8 @@ export default function MyBooks() {
 	
 	useEffect(function() {
 		if (!data) {
-			setRequestURL(`${import.meta.env['VITE_API_URL']}/users/${auth?.getUser().id}/books`)
+			let lookupId = ownerView ? auth?.getUser().id : params.user_id
+			setRequestURL(`${import.meta.env['VITE_API_URL']}/users/${lookupId}/books`)
 		}
 	}, [data])
 

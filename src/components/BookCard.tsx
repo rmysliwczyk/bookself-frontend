@@ -21,7 +21,7 @@ export default function BookCard({book, onDelete}: BookCardProps) {
 					<Grid container spacing={1} component={Paper} variant="outlined" sx={{padding: '10px'}}>
 						<Grid size={6}>
 							<Box sx={{height: '200px'}}>
-							<img style={{width: '100%', height: '100%', objectFit: 'contain'}} src={URL.createObjectURL(new Blob([Uint8Array.fromBase64(book.cover_image)], {type: "image/jpeg"}))}/>
+							<img style={{width: '100%', height: '100%', objectFit: 'contain'}} src={book.cover_photo_url}/>
 							</Box>
 						</Grid>
 						<Grid size={6}>

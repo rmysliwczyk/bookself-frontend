@@ -52,6 +52,7 @@ function App() {
 								<Route path="books/add" element={<AddBook />} />
 								<Route path="/books/:book_id" element={<EditBook />} />
 								<Route path="/user/:user_id" element={<Profile />} />
+								<Route path="/user/:user_id/books" element={<Books />} />
 							</Route>
 						</Route>
 						<Route path="/login" element={<Login />} />

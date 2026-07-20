@@ -1,9 +1,9 @@
-import MyBooks from '../components/MyBooks'
+import UserBooks from '../components/UserBooks'
 
 export default function Books() {
 	return (
 		<>
-			<MyBooks/>
+			<UserBooks/>
 		</>
 	)
 }

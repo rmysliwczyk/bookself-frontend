@@ -16,9 +16,12 @@ export default function AddBook() {
 	const {data, error, loading, post} = usePost()
 	const navigate = useNavigate()
 
-	function handleValidated(data: BookFormData) {
+	async function handleValidated({data, cover_picture}:{data: BookFormData, cover_picture: File}) {
 		data.user_id = auth?.getUser()?.id || null
-		post(`${import.meta.env.VITE_API_URL}/books/`, data)
+		const readyFormData = new FormData()
+		readyFormData.append("data", JSON.stringify(data))
+		readyFormData.append("cover_picture", cover_picture)
+		await fetch(`${import.meta.env.VITE_API_URL}/books/`, {body: readyFormData, method: "POST", headers: {"Authorization": `Bearer ${auth?.getUser()?.token}`}})
 		console.log(data)
 	}
 	

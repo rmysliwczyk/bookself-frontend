@@ -11,7 +11,7 @@ import TC from '../utils/TitleCaseFromSnakeCase'
 
 interface BookFormProps {
 	defaultValues?: BookFormData
-	onValidated: (data: BookFormData) => void
+	onValidated: ({data, cover_picture}:{data: BookFormData, cover_picture: File}) => void
 	loading?: boolean
 }
 
@@ -29,11 +29,10 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 		event.preventDefault()
 		const formData = new FormData(event.target)
 		const formDataObject = Object.fromEntries(formData) as any as BookFormData
-		if (formDataObject.cover_image && formDataObject.cover_image instanceof File) {
-			formDataObject.cover_image = (await formDataObject.cover_image.bytes()).toBase64()
-			console.log(formDataObject.cover_image)
-		}
-		onValidated(formDataObject as any as BookFormData)
+		const cover_picture = formDataObject.cover_picture
+		delete formDataObject.cover_picture
+
+		onValidated({data: formDataObject as any as BookFormData, cover_picture: cover_picture})
 	}
 
 	return (
@@ -51,7 +50,7 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 							}
 						})}
 						<Grid size={{xs: 12, md: 12}} key="cover_image">
-							<Button component="label" variant="contained" sx={{width: "100%", height: "100%"}}>Upload cover image <Input sx={{display: "none"}}type="file" name="cover_image"/></Button>
+							<Button component="label" variant="contained" sx={{width: "100%", height: "100%"}}>Upload cover image <Input sx={{display: "none"}}type="file" name="cover_picture"/></Button>
 						</Grid>
 						<Grid size={12} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 							<Button variant='contained' type="submit" disabled={loading} sx={{width: "100px"}}>
