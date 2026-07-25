@@ -12,6 +12,11 @@ export type User = {
 	token: string
 }
 
+export type UserPublic = {
+	username: string,
+	id: string
+}
+
 export type Book = {
 	id: string,
 	title: string,

@@ -26,7 +26,7 @@ export default function usePost<T>() {
 
 		try {
 			const headers = new Headers(options?.headers || {})
-//			headers.set('Content-Type', 'application/json')
+
 			const user = auth?.getUser()
 			if (user) {
 				headers.set('Authorization', `Bearer ${user.token}`)
@@ -35,7 +35,7 @@ export default function usePost<T>() {
 			const res = await fetch(url, {
 				method: 'POST',
 				headers,
-				body: JSON.stringify(payload),
+				body: payload,
 				...options,
 			})
 

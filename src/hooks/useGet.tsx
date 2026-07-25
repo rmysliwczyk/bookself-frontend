@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
+
+import { AuthContext } from '../context/AuthContext'
 
 interface UseGetState<T> {
 	data: T | null
@@ -14,6 +16,7 @@ export default function useGet<T>(url: string, options?: RequestInit) {
 		loading: false,
 		error: null
 	})
+	const auth = useContext(AuthContext)
 	const [refetchIndex, setRefetchIndex] = useState(0)
 
 	function refetch() {
@@ -32,6 +35,12 @@ export default function useGet<T>(url: string, options?: RequestInit) {
 				setState({data: null, loading: true, error: null})
 				try {
 					const headers = new Headers(options?.headers || {})
+
+					const user = auth?.getUser()
+					if (user) {
+						headers.set('Authorization', `Bearer ${user.token}`)
+					}
+
 					const res = await fetch(url, {...options, headers})
 
 					const resData = await res.json()

@@ -45,7 +45,7 @@ export default function Login() {
 			const response_json_data = await response.json()
 			const user: User = {id: response_json_data.user.id, token: response_json_data.access_token}
 			auth?.login(user)
-			navigate("/books")
+			navigate(`/user/${user.id}/books`)
 		}
 	}
 

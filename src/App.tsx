@@ -11,7 +11,9 @@ import Layout from './components/Layout'
 import AddBook from './pages/AddBook'
 import Books from './pages/Books'
 import EditBook from './pages/EditBook'
+import FindUsers from './pages/FindUsers'
 import Login from './pages/Login'
+import Logout from './pages/Logout'
 import Profile from './pages/Profile'
 import Register from './pages/Register'
 
@@ -51,8 +53,10 @@ function App() {
 								<Route path="books" element={<Books />} />
 								<Route path="books/add" element={<AddBook />} />
 								<Route path="/books/:book_id" element={<EditBook />} />
+								<Route path="/find-users" element={<FindUsers />} />
 								<Route path="/user/:user_id" element={<Profile />} />
 								<Route path="/user/:user_id/books" element={<Books />} />
+								<Route path="/logout" element={<Logout />} />
 							</Route>
 						</Route>
 						<Route path="/login" element={<Login />} />

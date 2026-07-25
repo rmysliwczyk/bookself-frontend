@@ -8,7 +8,7 @@ import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 import { useEffect } from 'react'
-import { Outlet } from 'react-router'
+import {Link, Outlet} from 'react-router'
 
 export default function Layout() {	
 	// Hooks preparation section
@@ -64,7 +64,9 @@ export default function Layout() {
 							ml: '64px'
 						}}
 					>
+					<Link to="/books" style={{textDecoration: "none", color: "var(--primary)" }}>
 						BookSelf
+					</Link>
 					</Typography>
 					<Button color='inherit' onClick={toggleColorSchemeMode} sx={{width: '64px', height: '64px', borderRadius: '100%'}}>
 						<DarkModeIcon />

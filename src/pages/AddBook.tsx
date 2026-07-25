@@ -21,8 +21,7 @@ export default function AddBook() {
 		const readyFormData = new FormData()
 		readyFormData.append("data", JSON.stringify(data))
 		readyFormData.append("cover_picture", cover_picture)
-		await fetch(`${import.meta.env.VITE_API_URL}/books/`, {body: readyFormData, method: "POST", headers: {"Authorization": `Bearer ${auth?.getUser()?.token}`}})
-		console.log(data)
+		await post(`${import.meta.env.VITE_API_URL}/books/`, readyFormData)
 	}
 	
 	useEffect(function() {

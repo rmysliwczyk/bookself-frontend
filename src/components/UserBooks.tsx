@@ -65,9 +65,17 @@ export default function UserBooks() {
 	}
 
 	return (<>
-		<Button variant="contained" onClick={function() {navigate("/books/add")}}>
-			Add book
-		</Button>
+		<nav style={{display: 'flex', gap: '5px'}}>
+			<Button variant="contained" onClick={function() {navigate("/books/add")}}>
+				Add book
+			</Button>
+			<Button variant="contained" onClick={function() {navigate("/find-users")}}>
+				Find users
+			</Button>
+			<Button variant="contained" onClick={function() {navigate("/logout")}}>
+				Log out
+			</Button>
+		</nav>
 		<DeleteBookModal 
 				open={deleteBookModalData.open}
 				book={deleteBookModalData.book}

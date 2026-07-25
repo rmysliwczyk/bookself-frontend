@@ -5,6 +5,7 @@ import { createContext } from 'react'
 
 interface AuthContext {
 	login: (user: User) => void
+	logout: () => void
 	getUser: () => User | null
 	isTokenValid: () => Promise<boolean>
 }
@@ -20,6 +21,10 @@ export function AuthProvider({ children }: { children: any }) {
 			window.localStorage.removeItem('user')
 			window.localStorage.setItem('user', JSON.stringify(user))
 		}
+	}
+	
+	function logout() {
+		window.localStorage.removeItem('user')
 	}
 
 	function getUser(): User | null {
@@ -59,6 +64,7 @@ export function AuthProvider({ children }: { children: any }) {
 		<AuthContext
 			value={{
 				login,
+				logout,
 				getUser,
 				isTokenValid
 			}}
