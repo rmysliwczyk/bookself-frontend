@@ -50,8 +50,7 @@ function App() {
 					<Routes>
 						<Route element={<ProtectedRoute/>}>
 							<Route path="/" element={<Layout />} >
-								<Route path="books" element={<Books />} />
-								<Route path="books/add" element={<AddBook />} />
+								<Route path="/books/add" element={<AddBook />} />
 								<Route path="/books/:book_id" element={<EditBook />} />
 								<Route path="/find-users" element={<FindUsers />} />
 								<Route path="/user/:user_id" element={<Profile />} />

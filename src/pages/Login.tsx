@@ -13,7 +13,7 @@ import { AuthContext } from '../context/AuthContext'
 import type {Credentials, User} from '../types'
 
 import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 export default function Login() {
 	const navigate = useNavigate()
@@ -96,6 +96,7 @@ export default function Login() {
 									name="username"
 									label="Username"
 									variant="standard"
+									autoComplete="off"
 								/>
 							</FormControl>
 							<FormControl>
@@ -115,6 +116,7 @@ export default function Login() {
 									Login
 								</Button>
 							</FormControl>
+							<Typography>No account? <Link to="/register">Register</Link></Typography>
 							{error && (
 								<Alert severity="error">
 									{error}

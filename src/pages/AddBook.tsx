@@ -27,7 +27,7 @@ export default function AddBook() {
 	useEffect(function() {
 		console.log(data)
 		if (data && !loading && !error) {
-			navigate("/books")
+			navigate(`/user/${auth?.getUser()?.id}/books`)
 		}
 	},[data])
 

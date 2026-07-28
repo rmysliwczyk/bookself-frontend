@@ -4,20 +4,32 @@ import Container from '@mui/material/Container'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import Typography from '@mui/material/Typography'
 
+import {AuthContext} from '../context/AuthContext'
+
+import type {User} from '../types'
+
 import { useColorScheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import {Link, Outlet} from 'react-router'
 
-export default function Layout() {	
+export default function Layout() {
 	// Hooks preparation section
+	// For routing
+	const auth = useContext(AuthContext)
+	const [user, setUser] = useState<User|null>()
 	// Dark theme related
 	const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
 	const { mode, setMode } = useColorScheme()
 
-
 	// Functions and hook calling section
+	// Auth check for routing related
+		useEffect(() => {
+			if (auth) {
+				setUser(auth.getUser())
+			}
+		}, [auth])
 	// Dark theme related
 	useEffect(() => {
 		if (prefersDarkMode) {
@@ -64,7 +76,7 @@ export default function Layout() {
 							ml: '64px'
 						}}
 					>
-					<Link to="/books" style={{textDecoration: "none", color: "var(--primary)" }}>
+					<Link to={user ? `/user/${user.id}/books` : "/login"} style={{textDecoration: "none", color: "var(--primary)" }}>
 						BookSelf
 					</Link>
 					</Typography>
