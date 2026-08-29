@@ -38,7 +38,7 @@ export default function BookCard({book, onDelete}: BookCardProps) {
 									<Typography sx={{mt: '1px'}}>{book.rating}/10</Typography>
 								</Stack>
 								<Stack direction='row' sx={{height: '100%', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-									<Button><EditIcon onClick={function() {navigate(`/books/${book.id}`)}}/></Button><Button onClick={function() {onDelete(book)}}><DeleteIcon/></Button>
+									<Button onClick={function() {navigate(`/books/${book.id}`)}}><EditIcon/></Button><Button onClick={function() {onDelete(book)}}><DeleteIcon/></Button>
 								</Stack>
 							</Stack>
 						</Grid>
