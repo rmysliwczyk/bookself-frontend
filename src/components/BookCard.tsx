@@ -10,12 +10,15 @@ import Typography from '@mui/material/Typography'
 
 import type { Book } from '../types'
 
+import { useNavigate } from 'react-router'
+
 export interface BookCardProps {
 	book: Book,
 	onDelete: (book: Book) => void
 }
 
 export default function BookCard({book, onDelete}: BookCardProps) {
+	const navigate = useNavigate()
 	return (
 				<Grow in={true} timeout={1300}>
 					<Grid container spacing={1} component={Paper} variant="outlined" sx={{padding: '10px'}}>
@@ -35,7 +38,7 @@ export default function BookCard({book, onDelete}: BookCardProps) {
 									<Typography sx={{mt: '1px'}}>{book.rating}/10</Typography>
 								</Stack>
 								<Stack direction='row' sx={{height: '100%', alignItems: 'flex-end', justifyContent: 'flex-end'}}>
-									<Button><EditIcon/></Button><Button onClick={function() {onDelete(book)}}><DeleteIcon/></Button>
+									<Button><EditIcon onClick={function() {navigate(`/books/${book.id}`)}}/></Button><Button onClick={function() {onDelete(book)}}><DeleteIcon/></Button>
 								</Stack>
 							</Stack>
 						</Grid>

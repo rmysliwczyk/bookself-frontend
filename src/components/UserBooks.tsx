@@ -22,13 +22,12 @@ export default function UserBooks() {
 	const params = useParams()
 	const auth = useContext(AuthContext)
 
-	console.log(params)
 	const [requestURL, setRequestURL] = useState("")
 	const [ownerView, setOwnerView] = useState<boolean>(!params.user_id)
 	const {data, error: getError, loading: getLoading, refetch} = useGet<Array<Book>>(requestURL, {headers: {"Authorization": `Bearer ${auth!.getUser()!.token}`}})
 
 	const [deleteBookModalData, setDeleteBookModalData] = useState<DeleteBookModalData>({open: false})
-	const {deleteRequest, error: deleteError, loading: deleteLoading}  = useDelete() // TODO Finish implementing it
+	const {deleteRequest, error: deleteError, loading: deleteLoading}  = useDelete()
 
 	const navigate = useNavigate()
 	
@@ -46,10 +45,6 @@ export default function UserBooks() {
 			refetch()
 		}
 	}, [deleteError, deleteLoading])
-
-	function loggedIn() {
-
-	}
 
 	function handleOpenDeleteModal(book: Book) {
 		setDeleteBookModalData(
@@ -87,7 +82,6 @@ export default function UserBooks() {
 		>
 
 			{ data && data.map((book, index) => {
-				console.log(book)
 				return <Grid size={{xs: 12, md: 6, lg: 4}} key={index}>
 					<BookCard onDelete={handleOpenDeleteModal} book={book}/>
 				</Grid>

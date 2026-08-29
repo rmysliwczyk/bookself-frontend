@@ -1,37 +1,106 @@
 import Alert from '@mui/material/Alert'
 import Grow from '@mui/material/Grow'
 
-import usePost from '../hooks/usePost'
-
+import {AuthContext} from '../context/AuthContext'
 import BookForm from '../components/BookForm'
 
-import type {BookFormData} from '../types'
+import useGet from '../hooks/useGet'
+import usePatch from '../hooks/usePatch'
 
-import {useEffect} from 'react'
-import {useNavigate, useParams} from 'react-router'
+import type {Book, BookFormData} from '../types'
 
-export default function AddBook() {
-	const {data, error, loading, post} = usePost() // TODO - REPLACE WITH usePATCH when implemented
-	const navigate = useNavigate()
+import {useContext, useState, useEffect} from 'react'
+import {useParams, useNavigate} from 'react-router'
+
+export default function EditBook() {
+	const auth = useContext(AuthContext)
 	const params = useParams()
+	const [initialData, setInitialData] = useState<BookFormData>()
+	const {data, error, loading, patch} = usePatch()
+	const [coverPicture, setCoverPicture] = useState<File>()
+	const [pictureHandled, setPictureHandled] = useState(false);
+	const {data: getData, error: getError, loading: getLoading, refetch} = useGet<Book>(`${import.meta.env['VITE_API_URL']}/books/${params.book_id}`, {headers: {"Authorization": `Bearer ${auth!.getUser()!.token}`}})
+	const navigate = useNavigate()
 
-	function handleValidated(data: BookFormData) {
-		console.log("TODO - PATCH")
-		console.log(data)
+	async function handleValidated({data, cover_picture}:{data: BookFormData, cover_picture: File}) {
+		data.user_id = auth?.getUser()?.id || null
+		let book_id = data.id
+		delete data.id
+		await patch(`${import.meta.env.VITE_API_URL}/books/${book_id}`, JSON.stringify(data), {headers: {"Content-Type": "application/json"}})
+		
+		console.log(cover_picture)
+		if (cover_picture) {
+			setCoverPicture(cover_picture)
+		} else {
+			setPictureHandled(true)
+		}
 	}
 	
-	useEffect(function() {
-		console.log(data)
-		if (data && !loading && !error) {
-			navigate("/books")
-		}
-	},[data])
+	async function uploadCover() {
+		if (coverPicture) {
+			const formData = new FormData()
+			formData.append("cover_image_file", coverPicture)
 
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/books/${getData?.id}/cover`,
+				{
+					method: "PUT",
+					body: formData,
+					headers: {
+						'Authorization': `Bearer ${auth?.getUser()?.token}`
+					}
+				}
+			)
+			
+			if (res.status === 200) {
+				// Giving time to server to save the picture as it sends response too soon. Fix on server side in the future.
+				setTimeout(function() {setPictureHandled(true)}, 1000)
+			}
+		}
+	}
+
+	useEffect(function() {
+		async function parseData(getData: Book) {
+			const response = await fetch(getData.cover_photo_url)
+			let imageBlob = null
+
+			if (response.status == 200) {
+
+				imageBlob = await response.blob()
+			}
+			
+			if (imageBlob) {
+				setInitialData({
+					id: getData.id,
+					user_id: getData.user_id,
+					title: getData.title,
+					author: getData.author,
+					rating: getData.rating,
+					visibility_to_others: getData.visibility_to_others,
+					cover_picture: new File([imageBlob], "cover.jpg", {type: "image/jpeg"})
+				})
+			}
+		}
+
+		if (getData && !getError && !getError) {
+			parseData(getData)
+		}
+	},[getData])
+
+	useEffect(function() {
+		if (data && coverPicture) {
+			uploadCover();
+		}
+
+		if (data && !loading && !error && pictureHandled) {
+			navigate(`/user/${auth?.getUser()?.id}/books`)
+		}
+		
+	},[data, coverPicture, pictureHandled])
 
 	return (
 		<>
-			ID: {params.book_id}
-			{ <BookForm onValidated={handleValidated}  loading={loading} /> }
+			{ <BookForm defaultValues={initialData} onValidated={handleValidated} loading={loading && pictureHandled} /> }
 			{ error && <Grow in={Boolean(error)}><Alert severity="error">{error}</Alert></Grow> }
 		</>
 	)

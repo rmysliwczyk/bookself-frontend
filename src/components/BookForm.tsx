@@ -14,33 +14,43 @@ import TC from '../utils/TitleCaseFromSnakeCase'
 
 interface BookFormProps {
 	defaultValues?: BookFormData
-	onValidated: ({data, cover_picture}:{data: BookFormData, cover_picture: File}) => void
+	onValidated: ({data, cover_picture}:{data: BookFormData, cover_picture: File | null}) => void
 	loading?: boolean
 }
 
 export default function BookForm({defaultValues, onValidated, loading}: BookFormProps) {
 	const bookData = defaultValues ? defaultValues :
 		{
+			id: "",
 			user_id: "",
 			title: "",
 			author: "",
 			rating: "" as any as number,
 			visibility_to_others: false,
+			cover_picture: null
 		}
 
 	async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
 		const formDataObject = Object.fromEntries(formData) as any as BookFormData
+		formDataObject.id = bookData.id
 		if (!formDataObject.visibility_to_others) {
 			formDataObject.visibility_to_others = false
 		} else {
 			formDataObject.visibility_to_others = true
 		}
-		const cover_picture = formDataObject.cover_picture
+
+		let coverPicture: File | null
+		if (bookData.cover_picture && !formDataObject.cover_picture) {
+			coverPicture = bookData.cover_picture
+		} else {
+			coverPicture = formDataObject.cover_picture || null
+		}
 		delete formDataObject.cover_picture
 
-		onValidated({data: formDataObject as any as BookFormData, cover_picture: cover_picture})
+		onValidated({data: formDataObject as any as BookFormData, cover_picture: coverPicture})
+
 	}
 
 	return (
@@ -49,16 +59,16 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 				<Grow in={true} timeout={1000}>
 					<Grid container spacing={2} sx={{maxWidth: '360px'}}>
 						<Grid size={12}>
-							<TextField defaultValue={bookData.title} name="title" label="Title" fullWidth />
+							<TextField defaultValue={bookData.title} name="title" label="Title" fullWidth slotProps={{ inputLabel: {shrink: true}}}/>
 						</Grid>	<Grid size={12}>
-							<TextField defaultValue={bookData.author} name="author" label="Author" fullWidth />
+							<TextField defaultValue={bookData.author} name="author" label="Author" fullWidth slotProps={{ inputLabel: {shrink: true}}}/>
 						</Grid>
 						<Grid size={12}>
-							<TextField defaultValue={bookData.rating} name="rating" label="Rating" type="number" slotProps={{htmlInput: {'min': 0, 'max': 10}}} fullWidth />
+							<TextField defaultValue={bookData.rating} name="rating" label="Rating" type="number" slotProps={{htmlInput: {'min': 0, 'max': 10}, inputLabel: {shrink: true}}} fullWidth/>
 						</Grid>
 						<Grid size={12}>
 							<FormGroup>
-								<FormControlLabel control={<Checkbox defaultChecked={Boolean(bookData.visibility_to_others)} name="visibility_to_others" />} label="Visible to others" />
+								<FormControlLabel control={<Checkbox key={String(bookData.visibility_to_others)} defaultChecked={Boolean(bookData.visibility_to_others)} name="visibility_to_others" />} label="Visible to others" />
 							</FormGroup>
 						</Grid>
 						<Grid size={12} key="cover_image">

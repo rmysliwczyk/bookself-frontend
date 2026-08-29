@@ -1,4 +1,5 @@
 export interface BookFormData {
+	id?: string | null
 	user_id: string | null
 	title: string | null
 	author: string | null
@@ -22,7 +23,9 @@ export type Book = {
 	title: string,
 	author: string,
 	rating: number,
-	cover_photo_url: string
+	cover_photo_url: string,
+	visibility_to_others: boolean,
+	user_id: string
 }
 
 export type Credentials = {

@@ -3,21 +3,21 @@ import { useContext, useState } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { parseApiError } from '../utils/ApiErrorParser'
 
-interface UsePostState<T> {
+interface UsePatchState<T> {
 	data: T | null
 	loading: boolean
 	error: string | null
 }
 
-export default function usePost<T>() {
+export default function usePatch<T>() {
 	const auth = useContext(AuthContext)
-	const [state, setState] = useState<UsePostState<T>>({
+	const [state, setState] = useState<UsePatchState<T>>({
 		data: null,
 		error: null,
 		loading: false,
 	})
 
-	async function post(
+	async function patch(
 		url: string,
 		payload: any,
 		options?: RequestInit
@@ -34,7 +34,7 @@ export default function usePost<T>() {
 
 			const res = await fetch(url, {
 				...options,
-				method: 'POST',
+				method: 'PATCH',
 				headers,
 				body: payload,
 			})
@@ -61,5 +61,5 @@ export default function usePost<T>() {
 		setState({ data: null, error: null, loading: false })
 	}
 
-	return { post, reset, ...state }
+	return { patch, reset, ...state }
 }
