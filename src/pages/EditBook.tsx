@@ -61,25 +61,35 @@ export default function EditBook() {
 
 	useEffect(function() {
 		async function parseData(getData: Book) {
-			const response = await fetch(getData.cover_photo_url)
-			let imageBlob = null
-
-			if (response.status == 200) {
-
-				imageBlob = await response.blob()
-			}
 			
-			if (imageBlob) {
-				setInitialData({
-					id: getData.id,
-					user_id: getData.user_id,
-					title: getData.title,
-					author: getData.author,
-					rating: getData.rating,
-					visibility_to_others: getData.visibility_to_others,
-					cover_picture: new File([imageBlob], "cover.jpg", {type: "image/jpeg"})
-				})
+			let existingCoverPicture = null;
+			if (getData.cover_photo_url) {
+				try {
+					const response = await fetch(getData.cover_photo_url)
+					let imageBlob = null
+
+					if (response.status == 200) {
+
+						imageBlob = await response.blob()
+					}
+					
+					if (imageBlob) {
+						existingCoverPicture = new File([imageBlob], "cover.jpg", {type: "image/jpeg"})
+					} 
+				} catch (e) {
+					console.error(`Couldn't fetch existing cover picture: ${e}`);
+				}
 			}
+
+			setInitialData({
+				id: getData.id,
+				user_id: getData.user_id,
+				title: getData.title,
+				author: getData.author,
+				rating: getData.rating,
+				visibility_to_others: getData.visibility_to_others,
+				cover_picture: existingCoverPicture
+			})
 		}
 
 		if (getData && !getError && !getError) {
