@@ -10,7 +10,7 @@ import Input from '@mui/material/Input'
 
 import type {BookFormData} from '../types'
 
-import TC from '../utils/TitleCaseFromSnakeCase'
+import {useState, useEffect} from 'react'
 
 interface BookFormProps {
 	defaultValues?: BookFormData
@@ -19,6 +19,9 @@ interface BookFormProps {
 }
 
 export default function BookForm({defaultValues, onValidated, loading}: BookFormProps) {
+	console.log(defaultValues?.cover_picture?.name);
+	const [filename, setFilename] = useState(defaultValues?.cover_picture?.name);
+
 	const bookData = defaultValues ? defaultValues :
 		{
 			id: "",
@@ -53,6 +56,12 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 
 	}
 
+	useEffect(() => {
+		if (defaultValues) {
+			setFilename(defaultValues.cover_picture?.name)
+		}
+	}, [defaultValues])
+
 	return (
 		<>
 			<form onSubmit={handleSubmit} autoComplete='off'>
@@ -72,7 +81,16 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 							</FormGroup>
 						</Grid>
 						<Grid size={12} key="cover_image">
-							<Button component="label" variant="contained" sx={{width: "100%", height: "100%"}}>Upload cover image <Input sx={{display: "none"}}type="file" name="cover_picture"/></Button>
+							<Button component="label" variant="contained" sx={{width: "100%", height: "100%"}}>Upload cover image <Input sx={{display: "none"}} type="file" name="cover_picture" onChange={(event) => {
+								let files = (event.target as HTMLInputElement).files;
+								if (files && files.length > 0) {
+									setFilename(files[0].name);
+								}
+							}}/>
+							</Button>
+						</Grid>
+						<Grid size={12} sx={{textAlign: 'center'}}>
+							{filename ? <p>Selected file: {filename}</p> : ""}
 						</Grid>
 						<Grid size={12} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
 							<Button variant='contained' type="submit" disabled={loading} sx={{width: "100px"}}>

@@ -22,13 +22,12 @@ export default function EditBook() {
 	const {data: getData, error: getError, loading: getLoading, refetch} = useGet<Book>(`${import.meta.env['VITE_API_URL']}/books/${params.book_id}`, {headers: {"Authorization": `Bearer ${auth!.getUser()!.token}`}})
 	const navigate = useNavigate()
 
-	async function handleValidated({data, cover_picture}:{data: BookFormData, cover_picture: File}) {
+	async function handleValidated({data, cover_picture}:{data: BookFormData, cover_picture: File | null}) {
 		data.user_id = auth?.getUser()?.id || null
 		let book_id = data.id
 		delete data.id
 		await patch(`${import.meta.env.VITE_API_URL}/books/${book_id}`, JSON.stringify(data), {headers: {"Content-Type": "application/json"}})
 		
-		console.log(cover_picture)
 		if (cover_picture) {
 			setCoverPicture(cover_picture)
 		} else {
@@ -54,7 +53,7 @@ export default function EditBook() {
 			
 			if (res.status === 200) {
 				// Giving time to server to save the picture as it sends response too soon. Fix on server side in the future.
-				setTimeout(function() {setPictureHandled(true)}, 1000)
+				setTimeout(function() {setPictureHandled(true)}, 2000)
 			}
 		}
 	}
@@ -69,13 +68,11 @@ export default function EditBook() {
 					let imageBlob = null
 
 					if (response.status == 200) {
-
 						imageBlob = await response.blob()
+						if (imageBlob) {
+							existingCoverPicture = new File([imageBlob], "cover.jpg", {type: "image/jpeg"})
+						}
 					}
-					
-					if (imageBlob) {
-						existingCoverPicture = new File([imageBlob], "cover.jpg", {type: "image/jpeg"})
-					} 
 				} catch (e) {
 					console.error(`Couldn't fetch existing cover picture: ${e}`);
 				}

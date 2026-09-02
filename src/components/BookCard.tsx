@@ -24,7 +24,7 @@ export default function BookCard({book, onDelete}: BookCardProps) {
 					<Grid container spacing={1} component={Paper} variant="outlined" sx={{padding: '10px'}}>
 						<Grid size={6}>
 							<Box sx={{height: '200px'}}>
-							<img style={{width: '100%', height: '100%', objectFit: 'contain'}} src={book.cover_photo_url}/>
+							<img style={{width: '100%', height: '100%', objectFit: 'contain'}} src={`${book.cover_photo_url}?nocache=${self.crypto.getRandomValues(new Uint32Array(1))}`}/>
 							</Box>
 						</Grid>
 						<Grid size={6}>
