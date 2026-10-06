@@ -17,7 +17,7 @@ export default function EditBook() {
 	const params = useParams()
 	const [initialData, setInitialData] = useState<BookFormData>()
 	const {data, error, loading, patch} = usePatch()
-	const [coverPicture, setCoverPicture] = useState<File>()
+	const [coverPicture, setCoverPicture] = useState<File|null>(null)
 	const [pictureHandled, setPictureHandled] = useState(false);
 	const {data: getData, error: getError, loading: getLoading, refetch} = useGet<Book>(`${import.meta.env['VITE_API_URL']}/books/${params.book_id}`, {headers: {"Authorization": `Bearer ${auth!.getUser()!.token}`}})
 	const navigate = useNavigate()
@@ -29,6 +29,7 @@ export default function EditBook() {
 		await patch(`${import.meta.env.VITE_API_URL}/books/${book_id}`, JSON.stringify(data), {headers: {"Content-Type": "application/json"}})
 		
 		if (cover_picture) {
+			console.log(cover_picture)
 			setCoverPicture(cover_picture)
 		} else {
 			setPictureHandled(true)
@@ -53,7 +54,7 @@ export default function EditBook() {
 			
 			if (res.status === 200) {
 				// Giving time to server to save the picture as it sends response too soon. Fix on server side in the future.
-				setTimeout(function() {setPictureHandled(true)}, 2000)
+				setTimeout(function() {setPictureHandled(true)}, 10)
 			}
 		}
 	}
@@ -96,6 +97,7 @@ export default function EditBook() {
 
 	useEffect(function() {
 		if (data && coverPicture) {
+			console.log(coverPicture)
 			uploadCover();
 		}
 

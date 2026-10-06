@@ -20,7 +20,7 @@ interface BookFormProps {
 
 export default function BookForm({defaultValues, onValidated, loading}: BookFormProps) {
 	console.log(defaultValues?.cover_picture?.name);
-	const [filename, setFilename] = useState(defaultValues?.cover_picture?.name);
+	const [filename, setFilename] = useState<String>();
 
 	const bookData = defaultValues ? defaultValues :
 		{
@@ -45,7 +45,7 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 		}
 
 		let coverPicture: File | null
-		if (bookData.cover_picture && !formDataObject.cover_picture) {
+		if (bookData.cover_picture && formDataObject.cover_picture?.name === "") {
 			coverPicture = bookData.cover_picture
 		} else {
 			coverPicture = formDataObject.cover_picture || null
@@ -57,8 +57,8 @@ export default function BookForm({defaultValues, onValidated, loading}: BookForm
 	}
 
 	useEffect(() => {
-		if (defaultValues) {
-			setFilename(defaultValues.cover_picture?.name)
+		if (defaultValues?.cover_picture?.name !== "cover.jpg") {
+			setFilename(defaultValues?.cover_picture?.name)
 		}
 	}, [defaultValues])
 
