@@ -83,7 +83,12 @@ export default function UserBooks() {
 
 			{ data && data.map((book, index) => {
 				return <Grid size={{xs: 12, md: 6, lg: 4}} key={index}>
-					<BookCard onDelete={handleOpenDeleteModal} book={book}/>
+					<BookCard
+						book={book}
+						currentPageUserId={params.user_id ?? ''}
+						loggedInUserId={auth?.getUser()?.id ?? ''}
+						onDelete={handleOpenDeleteModal}
+					/>
 				</Grid>
 				})
 			}
